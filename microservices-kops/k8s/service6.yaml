@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: service6
-        image: your-dockerhub/service6:latest
+        image: umapathy22/service6
         ports:
         - containerPort: 3006
         env:
@@ -31,4 +31,4 @@ spec:
   ports:
   - port: 3006
     targetPort: 3006
-  type: ClusterIP
+  type: LoadBalancer
