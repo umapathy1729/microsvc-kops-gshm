@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: service5
-        image: your-dockerhub/service5:latest
+        image: umapathy22/service5
         ports:
         - containerPort: 3005
         env:
@@ -31,4 +31,4 @@ spec:
   ports:
   - port: 3005
     targetPort: 3005
-  type: ClusterIP
+  type: LoadBalancer
