@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: your-dockerhub/api-gateway:latest
+        image: umapathy22/api-gateway
         ports:
         - containerPort: 3000
         env:
