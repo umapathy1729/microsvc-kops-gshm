@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+    environment {
+        IMAGE_NAME = "your-dockerhub/service4"
+        EC2_HOST   = "ubuntu@<your-ec2-ip>"
+    }
+    stages {
+        stage('Checkout') { steps { checkout scm } }
+        stage('Build Image') {
+            steps { sh "docker build -t ${IMAGE_NAME}:latest ." }
+        }
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh """
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                        docker push ${IMAGE_NAME}:latest
+                    """
+                }
+            }
+        }
+        stage('Deploy to K8s') {
+            steps {
+                sshagent(['ec2-ssh-key']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ${EC2_HOST}                         'kubectl rollout restart deployment/service4'
+                    """
+                }
+            }
+        }
+    }
+    post {
+        success { echo 'Service4 deployed successfully!' }
+        failure { echo 'Deployment failed!' }
+    }
+}
