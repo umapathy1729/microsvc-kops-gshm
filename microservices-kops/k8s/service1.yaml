@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: service1
-        image: your-dockerhub/service1:latest
+        image: umapathy22/service1
         ports:
         - containerPort: 3001
         env:
@@ -31,4 +31,4 @@ spec:
   ports:
   - port: 3001
     targetPort: 3001
-  type: ClusterIP
+  type: LoadBalancer
